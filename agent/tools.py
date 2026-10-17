@@ -52,8 +52,13 @@ def get_policy(ctx: AuthContext, policy_id: str) -> dict[str, Any]:
     Implementation notes:
         agent.helpcenter.load_policy_docs() returns every parsed doc.
     """
-    ### YOUR CODE HERE (HW1)
-    raise NotImplementedError("HW1: implement get_policy")
+    # YOUR CODE HERE (HW1)
+    for doc in load_policy_docs():
+        if doc.policy_id == policy_id:
+            return {"ok": True, "policy_id": doc.policy_id, "title": doc.title,
+                    "audience": doc.audience, "body": doc.body}
+    return {"ok": False, "error": "not_found",
+            "reason": f"The requested Policy {policy_id} not found!"}
 
 
 def search_products(
@@ -95,8 +100,70 @@ def search_products(
         agent.db.list_products(conn, store_id) gives the candidate set.
         Use `with db.connection() as conn:` to close the database automatically.
     """
-    ### YOUR CODE HERE (HW1)
-    raise NotImplementedError("HW1: implement search_products")
+    # YOUR CODE HERE (HW1)
+    query = query.strip()
+    if len(query) == 0:
+        return {
+            "ok": False,
+            "error": "invalid_argument",
+            "reason": "query must not be empty.",
+        }
+
+    if max_price_usd is not None and max_price_usd <= 0:
+        return {
+            "ok": False,
+            "error": "invalid_argument",
+            "reason": "max_price_usd must be greater than 0.",
+        }
+
+    limit = max(1, min(limit, MAX_SEARCH_LIMIT))
+    store_id = None
+    if store is not None:
+        with db.connection() as conn:
+            store_obj = db.get_store_by_name(conn, store)
+        if store_obj is None:
+            return {
+                "ok": False,
+                "error": "not_found",
+                "reason": f"Store {store!r} was not found.",
+            }
+        store_id = store_obj.id
+    with db.connection() as conn:
+        products = db.list_products(conn, store_id)
+
+    query_words = query.lower().split()
+    filtered_products = [
+        product
+        for product in products
+        if all(
+            word in (
+                product.title + " " + product.description
+            ).lower()
+            for word in query_words
+        )
+    ]
+    if max_price_usd is not None:
+        filtered_products = [
+            product
+            for product in filtered_products
+            if product.price_usd <= max_price_usd
+        ]
+
+    sorted_products = sorted(
+        filtered_products,
+        key=lambda p: (p.price_usd, p.id)
+    )
+
+    result = sorted_products[:limit]
+    products_out = [
+        {
+            "product_id": product.id,
+            "store_id": product.store_id,
+            "title": product.title,
+            "price_usd": product.price_usd,
+        }
+        for product in result]
+    return {"ok": True, "products": products_out, "count": len(result)}
 
 
 def list_my_orders(ctx: AuthContext) -> dict[str, Any]:
@@ -121,8 +188,33 @@ def list_my_orders(ctx: AuthContext) -> dict[str, Any]:
         scope is baked into which query you run. That is the point of the
         tool: the model cannot ask for someone else's orders through it.
     """
-    ### YOUR CODE HERE (HW1)
-    raise NotImplementedError("HW1: implement list_my_orders")
+    # YOUR CODE HERE (HW1)
+    if ctx.role == "support":
+        return {
+            "ok": False,
+            "error": "invalid_argument",
+            "reason": (
+                "Support staff have no orders of their own; "
+                "use get_order to look up a specific order."
+            ),
+        }
+    if ctx.role == "shopper":
+        with db.connection() as conn:
+            orders = db.list_orders_for_user(conn, ctx.user_id)
+    elif ctx.role == "merchant":
+        with db.connection() as conn:
+            orders = db.list_orders_for_store(conn, ctx.store_id)
+    else:
+        return {
+            "ok": False,
+            "error": "invalid_argument",
+            "reason": f"Unsupported role: {ctx.role}",
+        }
+    return {
+        "ok": True,
+        "orders": [order.to_public_dict() for order in orders],
+        "count": len(orders),
+    }
 
 
 def cancel_order(ctx: AuthContext, order_id: int, reason: str) -> dict[str, Any]:
@@ -167,8 +259,30 @@ def cancel_order(ctx: AuthContext, order_id: int, reason: str) -> dict[str, Any]
     paused = kill_switch("cancel_order")
     if paused is not None:
         return {"ok": False, "error": "paused", "reason": paused}
-    ### YOUR CODE HERE (HW1)
-    raise NotImplementedError("HW1: implement cancel_order")
+    # YOUR CODE HERE (HW1)
+    with db.connection() as conn:
+        order = db.get_order(conn, order_id)
+        if order is None:
+            return {
+                "ok": False,
+                "error": "not_found",
+                "reason": f"Order {order_id} was not found.",
+            }
+        if not can_cancel_order(ctx, order.user_id, order.store_id):
+            return permission_denied(
+                f"A {ctx.role} may not cancel order {order_id}."
+            )
+        if order.status != "placed":
+            return {
+                "ok": False,
+                "error": "not_eligible",
+                "reason": (
+                    f"Order {order_id} has status {order.status!r}; "
+                    "orders can be cancelled only before shipment."
+                ),
+            }
+        db.set_order_status(conn, order_id, "cancelled")
+    return {"ok": True, "order_id": order_id, "status": "cancelled"}
 
 
 def find_order(ctx: AuthContext, query: str) -> dict[str, Any]:
@@ -202,5 +316,32 @@ def find_order(ctx: AuthContext, query: str) -> dict[str, Any]:
         (at most 5), each as the dict returned by agent.db. If no orders
         match, return {"ok": True, "orders": []}.
     """
-    ### YOUR CODE HERE (HW1)
-    raise NotImplementedError("HW1: implement find_order")
+    # YOUR CODE HERE (HW1)
+    if ctx.role not in ("shopper", "merchant", "support"):
+        return {
+            "ok": False,
+            "error": "invalid_argument",
+            "reason": f"Unsupported role: {ctx.role}",
+        }
+    query_words = query.lower().split()
+    if not query_words:
+        return {"ok": True, "orders": []}
+
+    with db.connection() as conn:
+        if ctx.role == "shopper":
+            orders = db.list_order_search_candidates(conn, user_id=ctx.user_id)
+        elif ctx.role == "merchant":
+            orders = db.list_order_search_candidates(conn, store_id=ctx.store_id)
+        else:
+            orders = db.list_order_search_candidates(conn, all_orders=True)
+        product_titles = {p.id: p.title for p in db.list_products(conn)}
+
+    matches = [
+        order
+        for order in orders
+        if all(
+            word in product_titles.get(order.product_id, "").lower()
+            for word in query_words
+        )
+    ]
+    return {"ok": True, "orders": [order.to_public_dict() for order in matches[:5]]}
