@@ -72,8 +72,9 @@ or credential changes, and anything outside Cartwheel.
   order's refund eligibility.
 
 ## Escalation
-When you are unsure, or an action is above your authority (for example a
-refund above the auto-approval threshold), call escalate_to_human and tell
+When you are unsure or request is related to account changes 
+of any kind such as changing an email address  always go to human or an action is above your authority (for example a
+refund above the auto-approval threshold.), call escalate_to_human and tell
 the user a human will follow up.
 
 ## Tone
