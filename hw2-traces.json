@@ -1,22 +1,24 @@
-{
-    "trace_id": "214c8ded7c00a38fb37b92f4f566aced",
-    "permalink": "http://localhost:3000/project/cartwheel-dev/traces?peek=214c8ded7c00a38fb37b92f4f566aced&timestamp=2026-10-19T05%3A16%3A52.777Z",
-    "prompt_version": "b77388b3c25d",
-    "tool_order": [
-        "get_order"
-    ],
-    "user_role": "shopper",
-    "user_id": 1,
-    "final_status": "completed"
-}
-{
-    "trace_id": "784a5babddf92480a321d12a02effa05",
-    "permalink": "http://localhost:3000/project/cartwheel-dev/traces?peek=784a5babddf92480a321d12a02effa05&timestamp=2026-10-19T06%3A13%3A06.470Z&observation=trace-784a5babddf92480a321d12a02effa05&traceTab=log",
-    "prompt_version": "b77388b3c25d",
-    "tool_order": [
-        "get_order"
-    ],
-    "user_role": "support",
-    "user_id": 9501,
-    "final_status": "completed"
-}
+[
+    {
+        "trace_id": "214c8ded7c00a38fb37b92f4f566aced",
+        "permalink": "http://localhost:3000/project/cartwheel-dev/traces?peek=214c8ded7c00a38fb37b92f4f566aced&timestamp=2026-10-19T05%3A16%3A52.777Z",
+        "prompt_version": "b77388b3c25d",
+        "tool_order": [
+            "get_order"
+        ],
+        "user_role": "shopper",
+        "user_id": 1,
+        "final_status": "completed"
+    },
+    {
+        "trace_id": "784a5babddf92480a321d12a02effa05",
+        "permalink": "http://localhost:3000/project/cartwheel-dev/traces?peek=784a5babddf92480a321d12a02effa05&timestamp=2026-10-19T06%3A13%3A06.470Z&observation=trace-784a5babddf92480a321d12a02effa05&traceTab=log",
+        "prompt_version": "b77388b3c25d",
+        "tool_order": [
+            "get_order"
+        ],
+        "user_role": "support",
+        "user_id": 9501,
+        "final_status": "completed"
+    }
+]
