@@ -1,0 +1,15 @@
+{"scenario_id": "support-0002", "decision": "accept", "reason": "Reviewed by the student; looks good.", "change": null}
+{"scenario_id": "support-0007", "decision": "accept", "reason": "Reviewed by the student; looks good.", "change": null}
+{"scenario_id": "support-0014", "decision": "revise", "reason": "I think it would be better if the agent can check the status so the merchant is ready.", "change": "Merchant now asks about a real order, 2793 (Woven Wool Socks, store 16, refund queued for approval), whether a dispute pauses the pending refund. The agent should look up the order and state the refund status, then answer from cw-disputes. Tuple record_state is order_refunded, tools_needed several_calls, and the key was rebuilt from orders and refunds rows plus cw-disputes."}
+{"scenario_id": "support-0015", "decision": "accept", "reason": "Reviewed by the student; looks good.", "change": null}
+{"scenario_id": "support-0018", "decision": "accept", "reason": "Reviewed by the student; looks good.", "change": null}
+{"scenario_id": "support-0025", "decision": "accept", "reason": "Reviewed by the student; looks good.", "change": null}
+{"scenario_id": "support-0050", "decision": "accept", "reason": "Reviewed by the student; looks good.", "change": null}
+{"scenario_id": "support-0058", "decision": "accept", "reason": "Reviewed by the student; looks good.", "change": null}
+{"scenario_id": "support-0069", "decision": "accept", "reason": "Reviewed by the student; looks good.", "change": null}
+{"scenario_id": "support-0092", "decision": "accept", "reason": "Reviewed by the student; looks good.", "change": null}
+{"scenario_id": "support-0145", "decision": "accept", "reason": "Reviewed by the student; looks good.", "change": null}
+{"scenario_id": "support-0188", "decision": "accept", "reason": "Reviewed by the student; looks good.", "change": null}
+{"scenario_id": "support-0198", "decision": "accept", "reason": "Reviewed by the student; looks good.", "change": null}
+{"scenario_id": "support-0237", "decision": "accept", "reason": "Reviewed by the student; looks good.", "change": null}
+{"scenario_id": "support-0242", "decision": "accept", "reason": "Reviewed by the student; looks good.", "change": null}
