@@ -1,0 +1,93 @@
+    ┌─scenario_id──┬─traces─┐
+ 1. │ support-0111 │      5 │
+ 2. │ support-0133 │      5 │
+ 3. │ support-0249 │      5 │
+ 4. │ support-0149 │      5 │
+ 5. │ support-0120 │      4 │
+ 6. │ support-0095 │      4 │
+ 7. │ support-0078 │      4 │
+ 8. │ support-0097 │      4 │
+ 9. │ support-0246 │      4 │
+10. │ support-0074 │      4 │
+11. │ support-0147 │      4 │
+12. │ support-0093 │      4 │
+13. │ support-0195 │      4 │
+14. │ support-0102 │      4 │
+15. │ support-0122 │      4 │
+16. │ support-0201 │      3 │
+17. │ support-0081 │      3 │
+18. │ support-0242 │      3 │
+19. │ support-0009 │      3 │
+20. │ support-0121 │      3 │
+21. │ support-0217 │      3 │
+22. │ support-0060 │      3 │
+23. │ support-0115 │      3 │
+24. │ support-0056 │      3 │
+25. │ support-0196 │      3 │
+26. │ support-0176 │      3 │
+27. │ support-0177 │      3 │
+28. │ support-0007 │      3 │
+29. │ support-0042 │      3 │
+30. │ support-0141 │      3 │
+31. │ support-0244 │      3 │
+32. │ support-0096 │      3 │
+33. │ support-0212 │      3 │
+34. │ support-0240 │      3 │
+35. │ support-0191 │      3 │
+36. │ support-0238 │      3 │
+37. │ support-0165 │      3 │
+38. │ support-0211 │      3 │
+39. │ support-0106 │      3 │
+40. │ support-0053 │      3 │
+41. │ support-0018 │      3 │
+42. │ support-0090 │      3 │
+43. │ support-0002 │      3 │
+44. │ support-0046 │      3 │
+45. │ support-0218 │      3 │
+46. │ support-0236 │      2 │
+47. │ support-0180 │      2 │
+48. │ support-0209 │      2 │
+49. │ support-0054 │      2 │
+50. │ support-0189 │      2 │
+    └─scenario_id──┴─traces─┘
+   ┌─role─────┬─traces─┐
+1. │ shopper  │    158 │
+2. │ merchant │    142 │
+3. │ support  │    124 │
+   └──────────┴────────┘
+   ┌─name──────────────────────┬─errors─┐
+1. │ openai.response           │      1 │
+2. │ cartwheel.session_message │      1 │
+   └───────────────────────────┴────────┘
+   ┌─escalations─┐
+1. │          23 │
+   └─────────────┘
+   ┌─input_tokens─┬─output_tokens─┬─────total_cost─┐
+1. │       560181 │         48084 │ 0.127613549928 │
+   └──────────────┴───────────────┴────────────────┘
+    ┌─trace_id─────────────────────────┬─spans─┬─duration_ms─┐
+ 1. │ e7931755833846b07d92f7df36902618 │    10 │       10564 │
+ 2. │ 618ec160a1438a5a5551cb00cad4129b │     8 │        9882 │
+ 3. │ b5906b6d59cc88ae4c3fcae78537bc7c │     8 │       10426 │
+ 4. │ ac8bfa8a11057d84a715babfeb7eb875 │     8 │        8303 │
+ 5. │ c220af9cd92d2cf7c317f9bade8c98df │     8 │       10551 │
+ 6. │ 83e770ae2ce01f0e98618f63873def09 │     8 │        8606 │
+ 7. │ 68a4aaf182cdf977711e598f777c0c61 │     8 │        9991 │
+ 8. │ d560cf4848e485b036471106033698fb │     8 │        7621 │
+ 9. │ 6b0aa67ac02691673fa477aedc2b5bd2 │     8 │        8918 │
+10. │ 11eddd8bd33cc141e806aaeaa29cf8d2 │     8 │        7355 │
+    └──────────────────────────────────┴───────┴─────────────┘
+   ┌─name───────────────┬─calls─┐
+1. │ get_order          │    79 │
+2. │ find_order         │    73 │
+3. │ search_products    │    58 │
+4. │ escalate_to_human  │    23 │
+5. │ list_my_orders     │    17 │
+6. │ search_help_center │    16 │
+7. │ issue_refund       │    15 │
+8. │ cancel_order       │     5 │
+9. │ get_policy         │     1 │
+   └────────────────────┴───────┘
+   ┌─permission_denials─┐
+1. │                  6 │
+   └────────────────────┘
